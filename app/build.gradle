@@ -39,6 +39,8 @@ android {
 dependencies {
     implementation libs.firebase.firestore.ktx
     implementation libs.firebase.storage.ktx
+    implementation libs.legacy.support.v4
+    implementation libs.recyclerview
     def nav_version = "2.7.7"
 
     implementation libs.core.ktx
