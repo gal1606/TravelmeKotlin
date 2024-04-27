@@ -18,6 +18,9 @@ class FirebaseDBVM: ViewModel() {
 
     private val dbUsers: CollectionReference = db.collection("Users")
     private val dbTrips: CollectionReference = db.collection("Trips")
+    private val dbLike: CollectionReference = db.collection("Like")
+    private val dbDone: CollectionReference = db.collection("Done")
+
     private val _trips = MutableLiveData<List<Trip>>()
     val trips: LiveData<List<Trip>> = _trips
 
@@ -35,6 +38,91 @@ class FirebaseDBVM: ViewModel() {
                 }
             }.addOnFailureListener { e ->
                 onFailure(e)
+            }
+    }
+
+    fun like(
+        tripId: String,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        val data = hashMapOf("tripId" to tripId)
+
+        dbLike.document(CurrentUser.currentUser.id).collection("like").document(tripId)
+            .set(data).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i("gil", "like")
+                    onSuccess()
+                } else {
+                    task.exception?.let {
+                        Log.e("gil", "Error liking trip: ", it)
+                        onFailure(it)
+                    }
+                }
+            }
+    }
+
+    fun unlike(
+        tripId: String,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        dbLike.document(CurrentUser.currentUser.id)
+            .collection("like")
+            .document(tripId)
+            .delete()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i("gil", "Unlike successful")
+                    onSuccess()
+                } else {
+                    task.exception?.let {
+                        Log.e("gil", "Error unliking trip: ", it)
+                        onFailure(it)
+                    }
+                }
+            }
+    }
+
+    fun markAsDone(
+        tripId: String,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        val data = hashMapOf("tripId" to tripId, "done" to true)
+
+        dbDone.document(CurrentUser.currentUser.id).collection("done").document(tripId)
+            .set(data)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i("gil", "Trip marked as done")
+                    onSuccess()
+                } else {
+                    task.exception?.let {
+                        Log.e("gil", "Error marking trip as done: ", it)
+                        onFailure(it)
+                    }
+                }
+            }
+    }
+
+    fun unmarkAsDone(
+        tripId: String,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        dbDone.document(CurrentUser.currentUser.id).collection("done").document(tripId)
+            .delete()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i("gil", "Trip unmarked as done")
+                    onSuccess()
+                } else {
+                    task.exception?.let {
+                        Log.e("gil", "Error unmarking trip as done: ", it)
+                        onFailure(it)
+                    }
+                }
             }
     }
 

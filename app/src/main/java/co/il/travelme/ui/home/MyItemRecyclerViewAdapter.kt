@@ -1,16 +1,20 @@
 package co.il.travelme.ui.home
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import co.il.travelme.R
+import co.il.travelme.StoreViewModel
 import co.il.travelme.databinding.ItemCardBinding
 import co.il.travelme.models.Trip
 import com.bumptech.glide.Glide
@@ -27,7 +31,7 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
         )
     }
 
-    @SuppressLint("StringFormatMatches")
+    @SuppressLint("StringFormatMatches", "ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.descriptionText.text = item.description
@@ -41,6 +45,33 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
             .centerCrop() // חיתוך התמונה כדי להתאים ל-ImageView
             .into(holder.image_view)
 
+        holder.SignVButton.setOnClickListener {
+            holder.isLiked = !holder.isLiked
+
+            // עדכן את הרקע בהתאם למצב החדש
+            if (holder.isLiked) {
+                holder.SignVButton.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.check_solid_pressed)
+                Log.i("gil","before like")
+                StoreViewModel.storeViewModel.like(item.id, {}, {})
+            } else {
+                holder.SignVButton.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.check_solid)
+                StoreViewModel.storeViewModel.unlike(item.id, {}, {})
+            }
+        }
+
+        holder.LikeImage.setOnClickListener {
+            holder.isLiked = !holder.isLiked
+
+            // עדכן את הרקע בהתאם למצב החדש
+            if (holder.isLiked) {
+                holder.LikeImage.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.like_pressed)
+                StoreViewModel.storeViewModel.markAsDone(item.id, {}, {})
+            } else {
+                holder.LikeImage.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.like)
+                StoreViewModel.storeViewModel.unmarkAsDone(item.id, {}, {})
+            }
+        }
+
     }
 
     class ViewHolder(binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -49,6 +80,8 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
         val level_text: TextView = binding.levelText
         val time_text: TextView = binding.timeText
         val SignVButton: ImageButton = binding.SignVButton
+        val LikeImage: ImageButton = binding.LikeImage
+        var isLiked: Boolean = false // הוסף משתנה לשמירת המצב
     }
 //    override fun getItemCount(): Int = values.size
 }
