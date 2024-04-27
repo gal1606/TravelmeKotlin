@@ -1,6 +1,8 @@
 package co.il.travelme.viewmodels
 
 import android.graphics.Bitmap
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import co.il.travelme.Helper.bitmapToUrl
 import co.il.travelme.models.User
@@ -13,6 +15,13 @@ import java.io.ByteArrayOutputStream
 class FirebaseAuthVM: ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
+    // LiveData עבור מצב ההתחברות
+    private val _isLoggedIn = MutableLiveData<Boolean>()
+
+
+    fun checkCurrentUser(): Boolean {
+        return auth.currentUser != null
+    }
 
     fun register(
         userEmail: String,
@@ -71,6 +80,15 @@ class FirebaseAuthVM: ViewModel() {
                     onFailure(task.exception ?: Exception("Unknown exception."))
                 }
             }
+    }
+
+    fun logout(onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit) {
+        try {
+            auth.signOut()
+            onSuccess()
+        } catch (e: Exception) {
+            onFailure(e)
+        }
     }
 
 }

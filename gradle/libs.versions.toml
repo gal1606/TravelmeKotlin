@@ -22,6 +22,7 @@ work-runtime-ktx = "2.9.0"
 databinding-adapters = "8.3.2"
 room-ktx = "2.6.1"
 lifecycle-viewmodel-compose = "2.7.0"
+com-google-android-libraries-mapsplatform-secrets-gradle-plugin = "2.0.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -49,4 +50,5 @@ androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "l
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+com-google-android-libraries-mapsplatform-secrets-gradle-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "com-google-android-libraries-mapsplatform-secrets-gradle-plugin" }
 

@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainBinding.bottomBar.search.setOnClickListener {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.action_itemFragment_to_searchFragment)
         }
         setContentView(view)
     }

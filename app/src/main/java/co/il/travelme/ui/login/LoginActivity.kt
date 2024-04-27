@@ -25,7 +25,12 @@ class LoginActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
             binding = ActivityLoginBinding.inflate(layoutInflater)
             val view = binding.root
-
+            if (AuthViewModel.authViewModel.checkCurrentUser())
+            {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
 
             binding.signupPromptTextView.setOnClickListener {
                 if (route == "Login") {
@@ -38,7 +43,6 @@ class LoginActivity : AppCompatActivity() {
                     route = "Login"
                 }
             }
-
             binding.loginButton.setOnClickListener {
                val userEmail = binding.emailEditText.text.toString()
                val userPassword = binding.passwordEditText.text.toString()
@@ -76,4 +80,10 @@ class LoginActivity : AppCompatActivity() {
 
             setContentView(view)
         }
+
+
+    class CheckIfUserLogIn {
+
     }
+
+}

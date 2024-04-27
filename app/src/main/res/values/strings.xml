@@ -17,4 +17,7 @@
     <string name="save">save</string>
     <string name="my_trips">my trips</string>
     <string name="logout">logout</string>
+    <string name="search_level">find trips by level</string>
+    <string name="search_description">find trips by description</string>
+    <string name="search_trips">find trips</string>
 </resources>
