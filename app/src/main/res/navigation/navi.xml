@@ -8,5 +8,18 @@
         android:id="@+id/itemFragment"
         android:name="co.il.travelme.ui.home.ItemFragment"
         android:label="fragment_item_list"
-        tools:layout="@layout/fragment_item_list" />
+        tools:layout="@layout/fragment_item_list" >
+        <action
+            android:id="@+id/action_itemFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="co.il.travelme.ui.Profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_itemFragment"
+            app:destination="@id/itemFragment" />
+    </fragment>
 </navigation>

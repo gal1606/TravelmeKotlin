@@ -22,7 +22,7 @@
 
     <!-- כפתור 6 -->
     <TextView
-        android:id="@+id/promotions"
+        android:id="@+id/profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -37,7 +37,7 @@
 
     <!-- כפתור 5 -->
     <TextView
-        android:id="@+id/allbrands"
+        android:id="@+id/search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Toast
 import co.il.travelme.AuthViewModel
 import co.il.travelme.CurrentUser
-import co.il.travelme.DialogMessage
 import co.il.travelme.MainActivity
 import co.il.travelme.databinding.ActivityLoginBinding
 

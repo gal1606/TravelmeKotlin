@@ -2,14 +2,32 @@ package co.il.travelme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import co.il.travelme.databinding.ActivityMainBinding
 import co.il.travelme.models.User
 import co.il.travelme.viewmodels.FirebaseAuthVM
 import co.il.travelme.viewmodels.FirebaseDBVM
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var mainBinding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mainBinding = ActivityMainBinding.inflate(layoutInflater)
+        val view = mainBinding.root
+
+        mainBinding.bottomBar.home.setOnClickListener {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.action_profileFragment_to_itemFragment)
+        }
+
+        mainBinding.bottomBar.profile.setOnClickListener {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.action_itemFragment_to_profileFragment2)
+        }
+
+        mainBinding.bottomBar.search.setOnClickListener {
+        }
+        setContentView(view)
     }
 }
 
@@ -21,9 +39,5 @@ object AuthViewModel {
 }
 object StoreViewModel {
     var storeViewModel: FirebaseDBVM = FirebaseDBVM()
-}
-
-object DialogMessage {
-    var dialogMessage : String = ""
 }
 
