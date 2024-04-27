@@ -12,4 +12,6 @@
     <string name="profile">PROFILE</string>
     <string name="search">SEARCH</string>
     <string name="like_button">Like</string>
+    <string name="level_and_length">level: %1$s length: %2$s</string>
+    <string name="time">time: %1$s</string>
 </resources>

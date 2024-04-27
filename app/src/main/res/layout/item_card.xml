@@ -78,7 +78,7 @@
             android:id="@+id/SignVButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="160dp"
+            android:layout_marginEnd="130dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/like_button"
             android:src="@drawable/ic_check_selector"
