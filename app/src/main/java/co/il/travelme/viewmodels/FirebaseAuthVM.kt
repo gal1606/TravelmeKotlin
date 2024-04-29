@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import co.il.travelme.CurrentUser
+import co.il.travelme.CurrentUser.currentUser
 import co.il.travelme.Helper.bitmapToUrl
 import co.il.travelme.models.User
 import com.google.firebase.ktx.Firebase
@@ -18,9 +20,19 @@ class FirebaseAuthVM: ViewModel() {
     // LiveData עבור מצב ההתחברות
     private val _isLoggedIn = MutableLiveData<Boolean>()
 
-
     fun checkCurrentUser(): Boolean {
-        return auth.currentUser != null
+        val firebaseUser = auth.currentUser
+        if (firebaseUser != null) {
+            // אתחול המשתנה currentUser באופן מפורש לפני שימוש
+            CurrentUser.currentUser = User(
+                id = firebaseUser.uid,
+                name = firebaseUser.displayName ?: "",
+                email = firebaseUser.email ?: "",
+                profileImage = firebaseUser.photoUrl?.toString() ?: ""
+            )
+            return true
+        }
+        return false
     }
 
     fun register(
@@ -88,6 +100,59 @@ class FirebaseAuthVM: ViewModel() {
             onSuccess()
         } catch (e: Exception) {
             onFailure(e)
+        }
+    }
+
+    fun updateProfile(
+        bitmap: Bitmap?,
+        name: String,
+        onSuccess: (result: User) -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        if (bitmap != null) {
+            bitmapToUrl(
+                bitmap = bitmap,
+                path ="pics/",
+                onSuccess = { result ->
+                    val profileUpdates = userProfileChangeRequest {
+                        displayName = auth.currentUser?.displayName.toString()
+                        photoUri = result
+                    }
+                    auth.currentUser!!.updateProfile(profileUpdates)
+                        .addOnCompleteListener { updateTask ->
+                            if (updateTask.isSuccessful) {
+                                onSuccess(
+                                    User(
+                                        id = auth.currentUser?.uid ?: "",
+                                        email = auth.currentUser?.email ?: "",
+                                        name = name,
+                                        profileImage = auth.currentUser?.photoUrl.toString()
+                                    )
+                                )
+                            }
+                        }
+                },
+                onFailure = {}
+            )
+        }
+        else
+        {
+            val profileUpdates = userProfileChangeRequest {
+                displayName = name
+            }
+            auth.currentUser!!.updateProfile(profileUpdates)
+                .addOnCompleteListener { update_task ->
+                    if (update_task.isSuccessful) {
+                        onSuccess(
+                            User(
+                                id = auth.currentUser?.uid ?: "",
+                                email = auth.currentUser?.email ?: "",
+                                name = name,
+                                profileImage = auth.currentUser?.photoUrl.toString()
+                            )
+                        )
+                    }
+                }
         }
     }
 

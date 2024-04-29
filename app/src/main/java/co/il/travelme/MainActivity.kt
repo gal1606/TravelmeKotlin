@@ -9,6 +9,7 @@ import co.il.travelme.viewmodels.FirebaseAuthVM
 import co.il.travelme.viewmodels.FirebaseDBVM
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import co.il.travelme.viewmodels.TripVM
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
@@ -40,5 +41,8 @@ object AuthViewModel {
 }
 object StoreViewModel {
     var storeViewModel: FirebaseDBVM = FirebaseDBVM()
+}
+object StoreTripVM {
+    lateinit var viewModel: TripVM
 }
 

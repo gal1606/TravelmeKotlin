@@ -1,11 +1,13 @@
 [versions]
 agp = "8.3.0-alpha02"
+compiler = "4.12.0"
 kotlin = "1.9.0"
 core-ktx = "1.13.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
+lifecycle-extensions = "2.4.0"
 material = "1.11.0"
 constraintlayout = "2.1.4"
 annotation = "1.7.0"
@@ -15,6 +17,8 @@ firebase-auth = "22.3.1"
 firebase-firestore-ktx = "24.11.1"
 firebase-storage-ktx = "20.3.0"
 legacy-support-v4 = "1.0.0"
+navigation-ui-ktx = "2.7.7"
+navigation-fragment-ktx = "2.7.7"
 recyclerview = "1.3.2"
 room-common = "2.6.1"
 play-services-maps = "18.2.0"
@@ -25,7 +29,12 @@ lifecycle-viewmodel-compose = "2.7.0"
 com-google-android-libraries-mapsplatform-secrets-gradle-plugin = "2.0.1"
 
 [libraries]
+androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "compiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }

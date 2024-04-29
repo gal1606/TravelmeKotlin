@@ -62,6 +62,27 @@ class FirebaseDBVM: ViewModel() {
             }
     }
 
+    fun updateUser(
+        user: User,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        dbUsers.document(CurrentUser.currentUser.id).get()
+            .addOnSuccessListener {
+                val update: MutableMap<String, String> = HashMap()
+                update["name"] = user.name
+                update["profileImage"] = user.profileImage
+                update["email"] = user.email
+                update["id"] = user.id
+                CurrentUser.currentUser = user
+                dbUsers.document(CurrentUser.currentUser.id).set(update).addOnCompleteListener {
+                    onSuccess()
+                }
+            }.addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
     fun unlike(
         tripId: String,
         onSuccess: () -> Unit,

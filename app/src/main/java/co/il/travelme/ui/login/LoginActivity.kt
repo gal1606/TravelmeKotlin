@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
                     AuthViewModel.authViewModel.register(userEmail,userPassword,name,
                         onSuccess = {
                             CurrentUser.currentUser = it
-                            StoreViewModel.storeViewModel.addUser(CurrentUser.currentUser, {}, {})
+                            StoreViewModel.storeViewModel.addUser(CurrentUser.currentUser!!, {}, {})
                             Toast.makeText(this,"Your account has been created",Toast.LENGTH_LONG).show()
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)

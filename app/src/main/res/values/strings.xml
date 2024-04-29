@@ -20,4 +20,17 @@
     <string name="search_level">find trips by level</string>
     <string name="search_description">find trips by description</string>
     <string name="search_trips">find trips</string>
+    <string name="choose_level">Choose difficulty level:</string>
+    <string name="add_trips">add new trip</string>
+
+
+    <string-array name="Difficulty_selection">
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="addtrip">Add New Trip</string>
+
 </resources>
