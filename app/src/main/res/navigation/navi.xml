@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_profileFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addTrip"
+            app:destination="@id/addTrip" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -40,4 +43,9 @@
             android:id="@+id/action_searchFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addTrip"
+        android:name="co.il.travelme.ui.AddTrip.AddTrip"
+        android:label="fragment_add_trip"
+        tools:layout="@layout/fragment_add_trip" />
 </navigation>

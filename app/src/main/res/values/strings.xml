@@ -22,6 +22,10 @@
     <string name="search_trips">find trips</string>
     <string name="choose_level">Choose difficulty level:</string>
     <string name="add_trips">add new trip</string>
+    <string name="trip_description">trip description</string>
+    <string name="level">level:</string>
+    <string name="length">length:</string>
+    <string name="timeTitle">time:</string>
 
 
     <string-array name="Difficulty_selection">

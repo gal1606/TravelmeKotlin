@@ -13,6 +13,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.il.travelme.AuthViewModel.authViewModel
 import co.il.travelme.CurrentUser
@@ -70,6 +73,11 @@ class ProfileFragment : Fragment() {
                         Toast.makeText(activity, exception.toString(), Toast.LENGTH_LONG).show()
                     })
             }
+
+            binding.AddNewTripButton.setOnClickListener {
+                findNavController().navigate(R.id.action_profileFragment_to_addTrip)
+            }
+
             adapter = MyItemRecyclerViewAdapter()
 
             binding.list.layoutManager = LinearLayoutManager(context)
