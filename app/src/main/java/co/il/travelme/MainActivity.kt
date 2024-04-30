@@ -19,15 +19,24 @@ class MainActivity : AppCompatActivity() {
         val view = mainBinding.root
 
         mainBinding.bottomBar.home.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.action_profileFragment_to_itemFragment)
+            // בדיקה אם המשתמש כבר נמצא בעמוד הבית
+            if (findNavController(R.id.nav_host_fragment).currentDestination?.id != R.id.itemFragment) {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.itemFragment)
+            }
         }
 
         mainBinding.bottomBar.profile.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.action_itemFragment_to_profileFragment2)
+            // בדיקה אם המשתמש כבר נמצא בעמוד הפרופיל
+            if (findNavController(R.id.nav_host_fragment).currentDestination?.id != R.id.profileFragment) {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
+            }
         }
 
         mainBinding.bottomBar.search.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.action_itemFragment_to_searchFragment)
+            // בדיקה אם המשתמש כבר נמצא בעמוד החיפוש
+            if (findNavController(R.id.nav_host_fragment).currentDestination?.id != R.id.searchFragment) {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.searchFragment)
+            }
         }
         setContentView(view)
     }
