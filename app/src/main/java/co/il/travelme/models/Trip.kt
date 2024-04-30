@@ -16,7 +16,8 @@ data class Trip(
     var length: Double = 0.0,
     var time: Double = 0.0,
     var pending: Boolean = false,
-    var tripid: String = ""
+    var tripid: String = "",
+    var UserId: String = ""
 ) {
-    constructor() : this("", "", GeoPoint(0.0, 0.0), "", "", 0.0, 0.0, false,"")
+    constructor() : this("", "", GeoPoint(0.0, 0.0), "", "", 0.0, 0.0, false,"","")
 }

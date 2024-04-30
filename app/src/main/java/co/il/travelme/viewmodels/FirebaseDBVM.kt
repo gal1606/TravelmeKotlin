@@ -25,6 +25,22 @@ class FirebaseDBVM: ViewModel() {
     val trips: LiveData<List<Trip>> = _trips
 
 
+    fun addTrip(
+        trip: Trip,
+        onSuccess: (result: Trip) -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        dbTrips.add(trip)
+            .addOnSuccessListener {
+                trip.tripid = it.id
+                dbTrips.document(trip.tripid).update("id", trip.tripid).addOnSuccessListener {
+                    onSuccess(trip)
+                }
+            }.addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
     fun addUser(
         user: User,
         onSuccess: () -> Unit,
@@ -151,7 +167,6 @@ class FirebaseDBVM: ViewModel() {
         onSuccess: (result: ArrayList<Trip>) -> Unit,
         onFailure: (exception: Exception) -> Unit
     ) {
-        Log.i("gil","document")
         val tripsList: ArrayList<Trip> = arrayListOf()
         dbTrips.get().addOnSuccessListener { documents ->
             for (document in documents) {
@@ -164,6 +179,8 @@ class FirebaseDBVM: ViewModel() {
                 val time = document.getDouble("time") ?: 0.0
                 val pending = document.getBoolean("pending") ?: false
                 val geoPoint = document.getGeoPoint("coord")
+                val userId = document.getString("userId") ?: ""
+
 
                 if (geoPoint != null) {
                     val trip = Trip(
@@ -174,12 +191,12 @@ class FirebaseDBVM: ViewModel() {
                         imageUrl = imageUrl,
                         length = length,
                         time = time,
-                        pending = pending
+                        pending = pending,
+                        UserId = userId
                     )
                     tripsList.add(trip)
                 }
             }
-            Log.i("gil","finish")
             onSuccess(tripsList)
         }.addOnFailureListener { exception ->
             // Log the error or handle the failure

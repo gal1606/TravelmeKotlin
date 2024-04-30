@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -19,29 +20,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.il.travelme.AuthViewModel.authViewModel
 import co.il.travelme.CurrentUser
+import co.il.travelme.Helper.HandleImage
 import co.il.travelme.R
 import co.il.travelme.StoreTripVM.viewModel
 import co.il.travelme.StoreViewModel
 import co.il.travelme.databinding.FragmentProfileBinding
+import co.il.travelme.`interface`.ImageHandlerCallback
 import co.il.travelme.models.Trip
 import co.il.travelme.ui.home.MyItemRecyclerViewAdapter
 import co.il.travelme.ui.login.LoginActivity
 import com.bumptech.glide.Glide
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), ImageHandlerCallback {
     private lateinit var adapter: MyItemRecyclerViewAdapter
 
     private lateinit var tripsObserver: Observer<List<Trip>>
 
     private var selectedBitmap: Bitmap? = null
     private lateinit var binding: FragmentProfileBinding
-    // יצירת תגובה לתוצאת בחירת תמונה
-    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        // טיפול ב-Uri של התמונה שנבחרה
-        if (uri != null) {
-            handleImageUri(uri)
-        }
-    }
+    private lateinit var mHandleImage : HandleImage
+
 
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +53,8 @@ class ProfileFragment : Fragment() {
             super.onViewCreated(view, savedInstanceState)
 
             fillingDetails()
+            mHandleImage = HandleImage(this, binding.profileButton)  // נניח שהכפתור שלך נקרא tripButton
+            mHandleImage.registerImagePicker(this)
 
             binding.profileButton.setOnClickListener {
                 openGalleryForImage()
@@ -112,9 +112,9 @@ class ProfileFragment : Fragment() {
     private fun saveProfile() {
         authViewModel.updateProfile(selectedBitmap,binding.NameEditText.text.toString(),
             onSuccess = { user ->
-                CurrentUser.currentUser?.profileImage = user.profileImage
-                CurrentUser.currentUser?.name = user.name
-                CurrentUser.currentUser?.let {
+                CurrentUser.currentUser.profileImage = user.profileImage
+                CurrentUser.currentUser.name = user.name
+                CurrentUser.currentUser.let {
                     StoreViewModel.storeViewModel.updateUser(
                         user = it,
                         onSuccess = {
@@ -130,15 +130,18 @@ class ProfileFragment : Fragment() {
 
 
     private fun openGalleryForImage() {
-            // כוונה לפתיחת הגלריה ובחירת תמונה
-            getContent.launch("image/*")
-        }
+        mHandleImage.openGalleryForImage()
+    }
+    override fun onImageSelected(imageUri: Uri, imageView: ImageView) {
+        Glide.with(this)
+            .load(imageUri)
+            .into(imageView)
 
-        private fun handleImageUri(imageUri: Uri) {
-            Glide.with(this)
-                .load(imageUri)
-                .into(binding.profileButton)
+        val selectedBitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
+    }
 
-            selectedBitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
-        }
+    override fun onImageError(error: String) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
+
 }

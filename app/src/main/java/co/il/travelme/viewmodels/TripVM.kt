@@ -35,7 +35,7 @@ class TripVM : ViewModel() {
 
     fun searchMyTrips(id: String) {
         _filteMyTrips.value = _trips.value?.filter { trip ->
-            trip.id == id
+            trip.UserId == id
         }
     }
 

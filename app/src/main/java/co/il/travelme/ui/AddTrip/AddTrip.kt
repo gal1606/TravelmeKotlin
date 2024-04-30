@@ -1,60 +1,103 @@
 package co.il.travelme.ui.AddTrip
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import co.il.travelme.R
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.net.toUri
+import androidx.navigation.NavHostController
+import co.il.travelme.CurrentUser
+import co.il.travelme.Helper.HandleImage
+import co.il.travelme.Helper.bitmapToUrl
+import co.il.travelme.Helper.uriToBitmap
+import co.il.travelme.StoreTripVM.viewModel
+import co.il.travelme.StoreViewModel
+import co.il.travelme.databinding.FragmentAddTripBinding
+import co.il.travelme.`interface`.ImageHandlerCallback
+import co.il.travelme.models.Trip
+import co.il.travelme.viewmodels.TripVM
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.GeoPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddTrip.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AddTrip : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class AddTrip : Fragment(), ImageHandlerCallback {
+    private lateinit var binding: FragmentAddTripBinding
+    private var selectedBitmap: Bitmap? = null
+    private lateinit var mHandleImage : HandleImage
+    private lateinit var trip : Trip
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_trip, container, false)
+    ): View {
+        binding = FragmentAddTripBinding.inflate(inflater, container, false)
+        return binding.getRoot()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddTrip.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddTrip().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mHandleImage = HandleImage(this, binding.TripButton)  // נניח שהכפתור שלך נקרא tripButton
+        mHandleImage.registerImagePicker(this)
+        trip = Trip()
+
+        binding.TripButton.setOnClickListener {
+            openGalleryForImage()
+        }
+
+        binding.button.setOnClickListener {
+            trip.time = binding.editTexttime.text.toString().toDouble()
+            trip.imageUrl = selectedBitmap.toString()
+            trip.length = binding.editTextLength.text.toString().toDouble()
+            trip.description = binding.editTextTextMultiLine.text.toString()
+            val latitude = binding.editTextlatitude.text.toString().toDouble()
+            val longitude = binding.editTextlongitude.text.toString().toDouble()
+            val coord = GeoPoint(latitude, longitude)
+            trip.coord = coord
+            trip.level = binding.spinner.getSelectedItem().toString()
+            trip.UserId = CurrentUser.currentUser.id
+            saveTripInDB(trip,requireActivity(),viewModel)
+        }
+
     }
+    private fun openGalleryForImage() {
+        mHandleImage.openGalleryForImage()
+    }
+    override fun onImageSelected(imageUri: Uri, imageView: ImageView) {
+        Glide.with(this)
+            .load(imageUri)
+            .into(imageView)
+
+        selectedBitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
+    }
+
+    override fun onImageError(error: String) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
+
+    fun saveTripInDB(trip: Trip, context: Context, viewModel: TripVM) {
+        bitmapToUrl(
+            bitmap = selectedBitmap,
+            path = "trips/",
+            onSuccess = { result ->
+                trip.imageUrl = result.toString()
+                StoreViewModel.storeViewModel.addTrip(
+                    trip = trip,
+                    onSuccess = {
+                       /* viewModel.createTrip(trip, context).apply {
+                            navController.navigate(Graph.MYTRIPS)
+                        }*/
+                    },
+                    onFailure = {}
+                )
+            },
+            onFailure = {}
+        )
+    }
+
 }

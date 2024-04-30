@@ -21,16 +21,29 @@
 
     </TextView>
 
+    <ImageButton
+        android:id="@+id/TripButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ic_insert_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TitleTextView"
+        android:contentDescription="@string/trip_description" />
+
     <TextView
         android:id="@+id/titleSpinnerTextView"
         style="?android:attr/spinnerItemStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textSize="15sp"
         android:lines="1"
         android:text="@string/choose_level"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleTextView">
+        app:layout_constraintTop_toBottomOf="@+id/TripButton">
 
     </TextView>
 
@@ -38,27 +51,17 @@
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
+        android:textSize="15sp"
         android:entries="@array/Difficulty_selection"
         app:layout_constraintStart_toEndOf="@+id/titleSpinnerTextView"
-        app:layout_constraintTop_toBottomOf="@+id/TitleTextView" />
-
-    <ImageButton
-        android:id="@+id/TripButton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/ic_insert_photo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/TripButton" />
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="50dp"
         android:autofillHints="@string/trip_description"
         android:ems="10"
         android:hint="@string/trip_description"
@@ -76,21 +79,10 @@
         android:layout_marginTop="11dp"
         android:ems="10"
         android:hint="@string/length"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
-
-    <EditText
-        android:id="@+id/editTextLevel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:autofillHints="@string/level"
-        android:ems="10"
-        android:hint="@string/level"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLength" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine"
+        android:autofillHints="@string/length" />
 
     <EditText
         android:id="@+id/editTexttime"
@@ -100,9 +92,32 @@
         android:autofillHints="@string/timeTitle"
         android:ems="10"
         android:hint="@string/timeTitle"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLevel" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLength" />
+
+    <EditText
+        android:id="@+id/editTextlatitude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/latitude"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/editTextlongitude"
+        app:layout_constraintTop_toBottomOf="@+id/editTexttime"
+        android:autofillHints="@string/latitude" />
+
+    <EditText
+        android:id="@+id/editTextlongitude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/longitude"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toEndOf="@id/editTextlatitude"
+        app:layout_constraintTop_toBottomOf="@+id/editTexttime"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="@string/longitude" />
+
 
     <Button
         android:id="@+id/button"
@@ -113,6 +128,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTexttime" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextlongitude" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
