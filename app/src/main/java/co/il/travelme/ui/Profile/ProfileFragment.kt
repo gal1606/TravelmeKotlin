@@ -34,8 +34,6 @@ import com.bumptech.glide.Glide
 class ProfileFragment : Fragment(), ImageHandlerCallback {
     private lateinit var adapter: MyItemRecyclerViewAdapter
 
-    private lateinit var tripsObserver: Observer<List<Trip>>
-
     private var selectedBitmap: Bitmap? = null
     private lateinit var binding: FragmentProfileBinding
     private lateinit var mHandleImage : HandleImage
@@ -83,7 +81,7 @@ class ProfileFragment : Fragment(), ImageHandlerCallback {
             binding.list.layoutManager = LinearLayoutManager(context)
             binding.list.adapter = adapter
 
-            viewModel.filteredTrips.observe(viewLifecycleOwner, Observer { trips ->
+            viewModel.filterMyTrips.observe(viewLifecycleOwner, Observer { trips ->
                 Log.i("gil", "trip size: " + trips.size)
                 adapter.submitList(trips)
             })

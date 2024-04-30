@@ -41,12 +41,13 @@
         android:layout_marginTop="250dp"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/search_description"
+        android:hint="@string/search_description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="@string/search_description" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/findTripButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
@@ -56,11 +57,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="370dp"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
+        app:layout_constraintTop_toBottomOf="@+id/findTripButton"
         tools:listitem="@layout/item_card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

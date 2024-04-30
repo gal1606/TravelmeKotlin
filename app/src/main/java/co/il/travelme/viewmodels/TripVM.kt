@@ -13,7 +13,9 @@ class TripVM : ViewModel() {
     val trips: LiveData<List<Trip>> = _trips
 
     private val _filteMyTrips = MutableLiveData<List<Trip>>()
-    val filteredTrips: LiveData<List<Trip>> get() = _filteMyTrips
+    val filterMyTrips: LiveData<List<Trip>> get() = _filteMyTrips
+    private val _filteredTrips = MutableLiveData<List<Trip>>()
+    val filterTrips: LiveData<List<Trip>> get() = _filteredTrips
 
 
     init {
@@ -36,6 +38,12 @@ class TripVM : ViewModel() {
     fun searchMyTrips(id: String) {
         _filteMyTrips.value = _trips.value?.filter { trip ->
             trip.UserId == id
+        }
+    }
+
+    fun filterTrips(difficulty: String, searchText: String) {
+        _filteredTrips.value = _trips.value?.filter { trip ->
+            trip.level == difficulty && trip.description.contains(searchText, ignoreCase = true)
         }
     }
 
