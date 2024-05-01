@@ -125,7 +125,7 @@ class SearchFragment : Fragment() {
             googleMap.addMarker(
                 MarkerOptions()
                     .position(location)
-                    .title(trip.level)  // שם הטיול
+                    .title(trip.title)  // שם הטיול
                     .snippet(trip.description)  // תיאור הטיול
             )
         }

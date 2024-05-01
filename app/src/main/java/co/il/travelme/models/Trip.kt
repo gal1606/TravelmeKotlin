@@ -10,6 +10,7 @@ import com.google.firebase.firestore.GeoPoint
 data class Trip(
     var id: String = "",  // הוספת שדה id כדי להתאים למבנה ב-Firebase
     var description: String = "",
+    var title : String = "",
     var coord: GeoPoint = GeoPoint(0.0, 0.0),  // וודא שהטיפוס הזה מופיע כך בפועל במסד הנתונים
     var level: String = "",
     var imageUrl: String = "",
@@ -19,5 +20,5 @@ data class Trip(
     var tripid: String = "",
     var UserId: String = ""
 ) {
-    constructor() : this("", "", GeoPoint(0.0, 0.0), "", "", 0.0, 0.0, false,"","")
+    constructor() : this("", "","", GeoPoint(0.0, 0.0), "", "", 0.0, 0.0, false,"","")
 }

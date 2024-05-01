@@ -173,6 +173,7 @@ class FirebaseDBVM: ViewModel() {
                 Log.i("gil",document.id)
                 val tripId = document.id
                 val description = document.getString("description") ?: ""
+                val title = document.getString("title") ?: ""
                 val imageUrl = document.getString("imageUrl") ?: ""
                 val level = document.getString("level") ?: ""
                 val length = document.getDouble("length") ?: 0.0
@@ -186,6 +187,7 @@ class FirebaseDBVM: ViewModel() {
                     val trip = Trip(
                         id = tripId,
                         description = description,
+                        title = title,
                         coord = geoPoint,
                         level = level,
                         imageUrl = imageUrl,

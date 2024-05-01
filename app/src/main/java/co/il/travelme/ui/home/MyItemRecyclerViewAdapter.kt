@@ -37,6 +37,7 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
         holder.descriptionText.text = item.description
         holder.level_text.text = holder.itemView.context.getString(R.string.level_and_length, item.level, item.length)
         holder.time_text.text = holder.itemView.context.getString(R.string.time, item.time)
+        holder.Title_text.text = item.title
 
         Glide.with(holder.itemView.context) // זה ישתמש ב-context של ה-view של ה-ViewHolder
             .load(item.imageUrl) // ודא שאתה מעביר את URL של התמונה מהאובייקט `item`
@@ -81,6 +82,7 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
         val time_text: TextView = binding.timeText
         val SignVButton: ImageButton = binding.SignVButton
         val LikeImage: ImageButton = binding.LikeImage
+        val Title_text: TextView = binding.titleTextView
         var isLiked: Boolean = false // הוסף משתנה לשמירת המצב
     }
 //    override fun getItemCount(): Int = values.size
