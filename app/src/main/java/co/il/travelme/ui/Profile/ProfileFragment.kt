@@ -11,11 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.il.travelme.AuthViewModel.authViewModel
@@ -25,8 +22,7 @@ import co.il.travelme.R
 import co.il.travelme.StoreTripVM.viewModel
 import co.il.travelme.StoreViewModel
 import co.il.travelme.databinding.FragmentProfileBinding
-import co.il.travelme.`interface`.ImageHandlerCallback
-import co.il.travelme.models.Trip
+import co.il.travelme.interfaces.ImageHandlerCallback
 import co.il.travelme.ui.home.MyItemRecyclerViewAdapter
 import co.il.travelme.ui.login.LoginActivity
 import com.bumptech.glide.Glide

@@ -1,4 +1,4 @@
-package co.il.travelme.`interface`
+package co.il.travelme.interfaces
 
 import android.net.Uri
 import android.widget.ImageView

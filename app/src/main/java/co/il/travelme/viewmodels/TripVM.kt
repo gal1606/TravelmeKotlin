@@ -1,18 +1,20 @@
 package co.il.travelme.viewmodels
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.il.travelme.data.AppDatabase
+import co.il.travelme.data.TripDao
 import co.il.travelme.models.Trip
 import co.il.travelme.models.UserDone
 import co.il.travelme.models.UserLike
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
-class TripVM : ViewModel() {
+class TripVM (application: Application) : AndroidViewModel(application) {
     private val firebaseDBVM = FirebaseDBVM()  // ייבוא או יצירת מופע מ-FirebaseDBVM
     private val _trips = MutableLiveData<List<Trip>>()
     private var likeTrips = ArrayList<UserLike>()
@@ -23,26 +25,43 @@ class TripVM : ViewModel() {
     val filterMyTrips: LiveData<List<Trip>> get() = _filteMyTrips
     private val _filteredTrips = MutableLiveData<List<Trip>>()
     val filterTrips: LiveData<List<Trip>> get() = _filteredTrips
+    private val db: AppDatabase = AppDatabase.getInstance(application)
+    private val tripDao: TripDao =db.tripDao()
 
 
     init {
         loadTrips()
     }
 
+    // בפונקציה לטעינת טיולים
     private fun loadTrips() {
-        if (_trips.value != null && _trips.value!!.isNotEmpty()) {
-            return  // אם כבר טעונים, אל תטען שוב
+        viewModelScope.launch {
+            try {
+                // קודם כל בודק אם יש נתונים ב-ROOM
+                val localTrips = tripDao.getAllTrips()  // קריאה אסינכרונית ל-ROOM
+                if (localTrips.isNotEmpty()) {
+                    // יש נתונים במקומי, אז משתמשים בהם
+                    _trips.postValue(localTrips)
+                } else {
+                    loadFromFirebase()
+                }
+            } catch (e: Exception) {
+                Log.e("DatabaseError", "Error loading trips from database", e)
+                loadFromFirebase()
+            }
         }
+    }
+
+    private fun loadFromFirebase() {
         firebaseDBVM.getTrips(
             onSuccess = { tripsList ->
                 loadLikeTrips()
-                loadDoneTrips()
-                Log.i("gil","onSuccess")
+                Log.i("gil", "onSuccess")
                 _trips.postValue(tripsList)
-                Log.i("gil","onSuccess2" + tripsList.size)
+                Log.i("gil", "onSuccess2" + tripsList.size)
             },
             onFailure = { exception ->
-                Log.i("gil","onFailure")
+                Log.i("gil", "onFailure")
             }
         )
     }
@@ -60,9 +79,17 @@ class TripVM : ViewModel() {
         )
     }
 
+    private fun saveTripsInRoom(tripsList: List<Trip>) {
+        viewModelScope.launch {
+            tripDao.upsertAll(tripsList)
+        }
+    }
+
+
     private fun loadLikeTrips() {
         firebaseDBVM.getLikedTrips(
             onSuccess = { tripsLikeList ->
+                loadDoneTrips()
                 Log.i("gil","onSuccess3")
                 likeTrips = tripsLikeList
                 filterIsLike()
@@ -93,6 +120,7 @@ class TripVM : ViewModel() {
             trip.isDone = doneTripIds.contains(trip.id)  // בדיקה מהירה אם ה-ID נמצא ב-Set
         }
         _trips.postValue(_trips.value)  // עדכון ה-LiveData כדי שהשינויים ישקפו ב-UI
+        _trips.value?.let { saveTripsInRoom(it) }
     }
 
     fun filterTrips(difficulty: String, searchText: String) {

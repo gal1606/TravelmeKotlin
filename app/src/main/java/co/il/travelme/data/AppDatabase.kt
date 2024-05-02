@@ -1,7 +1,6 @@
 package co.il.travelme.data
 
 import android.content.Context
-import androidx.databinding.adapters.Converters
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -9,14 +8,13 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import co.il.travelme.models.Trip
 import com.example.travelme.extension.TripsSQLDBWorker
-import com.example.travelme.extension.TripsSQLDBWorker.Companion.KEY_FILENAME
 
 @Database(entities = [Trip::class], version = 1, exportSchema = false)
-@TypeConverters(Converters::class)
+@TypeConverters(GeoPointConverter::class)
 abstract class AppDatabase : RoomDatabase() {
+    abstract fun tripDao(): TripDao
 
     companion object {
 
@@ -29,8 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        // Create and pre-populate the database. See this article for more details:
-        // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "travelme-db")
                 .addCallback(

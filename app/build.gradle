@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     id 'com.google.gms.google-services'
+    id "kotlin-kapt"
     alias(libs.plugins.com.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
@@ -42,11 +43,11 @@ dependencies {
     implementation libs.firebase.storage.ktx
     implementation libs.legacy.support.v4
     implementation libs.recyclerview
-    implementation libs.androidx.room.common
+//    implementation libs.androidx.room.common
+//    implementation libs.androidx.room.ktx
     implementation libs.play.services.maps
     implementation libs.androidx.work.runtime.ktx
     implementation libs.androidx.databinding.adapters
-    implementation libs.androidx.room.ktx
     implementation libs.androidx.lifecycle.viewmodel.compose
 
     implementation libs.core.ktx
@@ -69,4 +70,8 @@ dependencies {
     implementation libs.androidx.navigation.fragment.ktx
     implementation libs.androidx.navigation.ui.ktx
 
+    //Room
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
 }

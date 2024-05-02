@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TripDao {
 
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(trips: List<Trip>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -29,7 +29,7 @@ interface TripDao {
     fun getTrip(id: String): Flow<Trip>
 
     @Query("SELECT * from trips")
-    fun getAllTrips(): Flow<List<Trip>>
+    suspend fun getAllTrips(): List<Trip>
 
     @Query("SELECT * from trips Where pending = False")
     fun getAllTripsApplied(): Flow<List<Trip>>

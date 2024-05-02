@@ -10,5 +10,3 @@ data class UserLike(
     @PrimaryKey @ColumnInfo(name = "id")
     val tripid: String
 )
-
-

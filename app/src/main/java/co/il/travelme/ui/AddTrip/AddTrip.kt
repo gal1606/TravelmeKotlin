@@ -11,16 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.net.toUri
-import androidx.navigation.NavHostController
 import co.il.travelme.CurrentUser
 import co.il.travelme.Helper.HandleImage
 import co.il.travelme.Helper.bitmapToUrl
-import co.il.travelme.Helper.uriToBitmap
 import co.il.travelme.StoreTripVM.viewModel
 import co.il.travelme.StoreViewModel
 import co.il.travelme.databinding.FragmentAddTripBinding
-import co.il.travelme.`interface`.ImageHandlerCallback
+import co.il.travelme.interfaces.ImageHandlerCallback
 import co.il.travelme.models.Trip
 import co.il.travelme.viewmodels.TripVM
 import com.bumptech.glide.Glide

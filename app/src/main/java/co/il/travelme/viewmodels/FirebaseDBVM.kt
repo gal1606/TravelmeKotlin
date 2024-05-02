@@ -11,8 +11,6 @@ import co.il.travelme.models.UserDone
 import co.il.travelme.models.UserLike
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.firestore.GeoPoint
 
 class FirebaseDBVM: ViewModel() {
 

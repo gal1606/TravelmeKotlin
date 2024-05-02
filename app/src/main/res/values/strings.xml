@@ -29,11 +29,10 @@
 
 
     <string-array name="Difficulty_selection">
-        <item>easy</item>
-        <item>medium</item>
-        <item>hard</item>
+        <item>קל</item>
+        <item>בנוני</item>
+        <item>קשה</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addtrip">Add New Trip</string>
     <string name="latitude">latitude</string>
