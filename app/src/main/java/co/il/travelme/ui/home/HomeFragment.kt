@@ -12,19 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.il.travelme.R
 import co.il.travelme.StoreTripVM.viewModel
-import co.il.travelme.models.Trip
 import co.il.travelme.viewmodels.TripVM
 
 /**
  * A fragment representing a list of Items.
  */
-class ItemFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     private lateinit var adapter: MyItemRecyclerViewAdapter  // הנחה שיש לך אדפטר כלשהו לנתונים
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        viewModel = ViewModelProvider(this).get(TripVM::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(TripVM::class.java)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        viewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
+            adapter.submitList(trips)
+        })
+
     }
 
     override fun onCreateView(
@@ -32,20 +37,16 @@ class ItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
-        viewModel = ViewModelProvider(this).get(TripVM::class.java)
+//        viewModel = ViewModelProvider(this).get(TripVM::class.java)
         adapter = MyItemRecyclerViewAdapter()
 
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = this@ItemFragment.adapter
+                adapter = this@HomeFragment.adapter
             }
         }
 
-        viewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
-            Log.d("Fragment", "Trips loaded: ${trips.size}")
-            adapter.submitList(trips)
-        })
 
         return view
     }

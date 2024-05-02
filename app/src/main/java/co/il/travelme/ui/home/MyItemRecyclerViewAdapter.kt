@@ -39,6 +39,23 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
         holder.time_text.text = holder.itemView.context.getString(R.string.time, item.time)
         holder.Title_text.text = item.title
 
+        with(holder) {
+            if (item.isLike) {
+                LikeImage.background = ContextCompat.getDrawable(itemView.context, R.drawable.like_pressed)
+                holder.isLiked = true
+            } else {
+                LikeImage.background = ContextCompat.getDrawable(itemView.context, R.drawable.like)
+            }
+
+            if (item.isDone) {
+                holder.isDone = true
+                SignVButton.background = ContextCompat.getDrawable(itemView.context, R.drawable.check_solid_pressed)
+            } else {
+                SignVButton.background = ContextCompat.getDrawable(itemView.context, R.drawable.check_solid)
+            }
+        }
+
+
         Glide.with(holder.itemView.context) // זה ישתמש ב-context של ה-view של ה-ViewHolder
             .load(item.imageUrl) // ודא שאתה מעביר את URL של התמונה מהאובייקט `item`
             .placeholder(R.drawable.imageexample) // תמונת טעינה זמנית
@@ -47,10 +64,10 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
             .into(holder.image_view)
 
         holder.SignVButton.setOnClickListener {
-            holder.isLiked = !holder.isLiked
+            holder.isDone = !holder.isDone
 
             // עדכן את הרקע בהתאם למצב החדש
-            if (holder.isLiked) {
+            if (holder.isDone) {
                 holder.SignVButton.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.check_solid_pressed)
                 Log.i("gil","before like")
                 StoreViewModel.storeViewModel.like(item.id, {}, {})
@@ -84,6 +101,7 @@ class MyItemRecyclerViewAdapter : ListAdapter<Trip, MyItemRecyclerViewAdapter.Vi
         val LikeImage: ImageButton = binding.LikeImage
         val Title_text: TextView = binding.titleTextView
         var isLiked: Boolean = false // הוסף משתנה לשמירת המצב
+        var isDone: Boolean = false // הוסף משתנה לשמירת המצב
     }
 //    override fun getItemCount(): Int = values.size
 }

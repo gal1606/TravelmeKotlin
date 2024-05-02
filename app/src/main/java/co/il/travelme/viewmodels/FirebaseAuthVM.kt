@@ -1,6 +1,7 @@
 package co.il.travelme.viewmodels
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,7 @@ class FirebaseAuthVM: ViewModel() {
     fun checkCurrentUser(): Boolean {
         val firebaseUser = auth.currentUser
         if (firebaseUser != null) {
+            Log.i("gil","my id: " + firebaseUser.uid)
             // אתחול המשתנה currentUser באופן מפורש לפני שימוש
             CurrentUser.currentUser = User(
                 id = firebaseUser.uid,

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import co.il.travelme.CurrentUser
 import co.il.travelme.models.Trip
 import co.il.travelme.models.User
+import co.il.travelme.models.UserDone
+import co.il.travelme.models.UserLike
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.gms.maps.model.LatLng
@@ -78,27 +80,6 @@ class FirebaseDBVM: ViewModel() {
             }
     }
 
-    fun updateUser(
-        user: User,
-        onSuccess: () -> Unit,
-        onFailure: (exception: Exception) -> Unit
-    ) {
-        dbUsers.document(CurrentUser.currentUser.id).get()
-            .addOnSuccessListener {
-                val update: MutableMap<String, String> = HashMap()
-                update["name"] = user.name
-                update["profileImage"] = user.profileImage
-                update["email"] = user.email
-                update["id"] = user.id
-                CurrentUser.currentUser = user
-                dbUsers.document(CurrentUser.currentUser.id).set(update).addOnCompleteListener {
-                    onSuccess()
-                }
-            }.addOnFailureListener { e ->
-                onFailure(e)
-            }
-    }
-
     fun unlike(
         tripId: String,
         onSuccess: () -> Unit,
@@ -118,6 +99,59 @@ class FirebaseDBVM: ViewModel() {
                         onFailure(it)
                     }
                 }
+            }
+    }
+
+    fun getLikedTrips(
+        onSuccess: (result: ArrayList<UserLike>) -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        val tripIdsList: ArrayList<UserLike> = arrayListOf()
+
+        dbLike.document(CurrentUser.currentUser.id).collection("like").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    tripIdsList.add(UserLike(tripid=document.id))
+                    Log.i("gil","Like" + document.id)
+                }
+                onSuccess(tripIdsList)
+            }
+    }
+
+
+    fun getDoneTrips(
+        onSuccess: (result: ArrayList<UserDone>) -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        val tripIdsList: ArrayList<UserDone> = arrayListOf()
+        dbDone.document(CurrentUser.currentUser.id).collection("done").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    tripIdsList.add(UserDone(tripid=document.id))
+                }
+                onSuccess(tripIdsList)
+            }
+    }
+
+
+    fun updateUser(
+        user: User,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        dbUsers.document(CurrentUser.currentUser.id).get()
+            .addOnSuccessListener {
+                val update: MutableMap<String, String> = HashMap()
+                update["name"] = user.name
+                update["profileImage"] = user.profileImage
+                update["email"] = user.email
+                update["id"] = user.id
+                CurrentUser.currentUser = user
+                dbUsers.document(CurrentUser.currentUser.id).set(update).addOnCompleteListener {
+                    onSuccess()
+                }
+            }.addOnFailureListener { e ->
+                onFailure(e)
             }
     }
 
