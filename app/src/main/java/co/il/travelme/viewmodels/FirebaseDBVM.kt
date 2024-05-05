@@ -30,16 +30,19 @@ class FirebaseDBVM: ViewModel() {
         onSuccess: (result: Trip) -> Unit,
         onFailure: (exception: Exception) -> Unit
     ) {
-        dbTrips.add(trip)
+        val ref = dbTrips.document()  // יצירת רפרנס למסמך חדש עם ID ייחודי
+        trip.id = ref.id  // השמת ה-ID החדש לאובייקט trip לפני שמירה
+
+        ref.set(trip)  // שמירת האובייקט trip עם ה-ID שהוגדר
             .addOnSuccessListener {
-                trip.tripid = it.id
-                dbTrips.document(trip.tripid).update("id", trip.tripid).addOnSuccessListener {
-                    onSuccess(trip)
-                }
-            }.addOnFailureListener { e ->
-                onFailure(e)
+                onSuccess(trip)  // הפעלת ה-callback עם האובייקט המעודכן
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)  // הפעלת ה-callback של כישלון עם השגיאה
             }
     }
+
+
 
     fun addUser(
         user: User,

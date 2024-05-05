@@ -1,11 +1,15 @@
 package co.il.travelme.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import co.il.travelme.Helper.bitmapToUrl
+import co.il.travelme.StoreViewModel
 import co.il.travelme.data.AppDatabase
 import co.il.travelme.data.TripDao
 import co.il.travelme.models.Trip
@@ -16,9 +20,9 @@ import kotlinx.coroutines.launch
 
 class TripVM (application: Application) : AndroidViewModel(application) {
     private val firebaseDBVM = FirebaseDBVM()  // ייבוא או יצירת מופע מ-FirebaseDBVM
-    private val _trips = MutableLiveData<List<Trip>>()
     private var likeTrips = ArrayList<UserLike>()
     private var doneTrips = ArrayList<UserDone>()
+    private val _trips = MutableLiveData<List<Trip>>()
     val trips: LiveData<List<Trip>> = _trips
 
     private val _filteMyTrips = MutableLiveData<List<Trip>>()
@@ -129,6 +133,33 @@ class TripVM (application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+    fun saveTripInDB(trip: Trip, context: Context, viewModel: TripVM, selectedBitmap: Bitmap?, onCompletion: () -> Unit) {
+        bitmapToUrl(
+            bitmap = selectedBitmap,
+            path = "trips/",
+            onSuccess = { imageUrl ->
+                trip.imageUrl = imageUrl.toString()
+                StoreViewModel.storeViewModel.addTrip(
+                    trip = trip,
+                    onSuccess = { trip ->
+                        Log.i("gil", trip.tripid)
+                        viewModel.viewModelScope.launch {
+                            tripDao.insert(trip)
+                            val currentList = _trips.value ?: emptyList()
+                            val updatedList = currentList + trip
+                            _trips.value = updatedList
+                            onCompletion() // קריאה לפונקציה לאחר שהכל הסתיים
+                        }
+                    },
+                    onFailure = {
+                        onCompletion() // קריאה לפונקציה גם אם יש כישלון
+                    }
+                )
+            },
+            onFailure = {
+                onCompletion() // קריאה לפונקציה גם אם יש כישלון בהעלאת התמונה
+            }
+        )
+    }
 
 }

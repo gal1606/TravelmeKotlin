@@ -26,6 +26,8 @@
     <string name="level">level:</string>
     <string name="length">length:</string>
     <string name="timeTitle">time:</string>
+    <string name="title">title:</string>
+    <string name="successfullyentered">You have successfully entered the new trip</string>
 
 
     <string-array name="Difficulty_selection">

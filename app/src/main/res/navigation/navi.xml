@@ -47,5 +47,9 @@
         android:id="@+id/addTrip"
         android:name="co.il.travelme.ui.AddTrip.AddTrip"
         android:label="fragment_add_trip"
-        tools:layout="@layout/fragment_add_trip" />
+        tools:layout="@layout/fragment_add_trip" >
+        <action
+            android:id="@+id/action_addTrip_to_itemFragment"
+            app:destination="@id/itemFragment" />
+    </fragment>
 </navigation>
